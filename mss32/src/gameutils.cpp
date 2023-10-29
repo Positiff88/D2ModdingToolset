@@ -29,9 +29,11 @@
 #include "lordtype.h"
 #include "midclient.h"
 #include "midclientcore.h"
+#include "middiplomacy.h"
 #include "midgard.h"
 #include "midgardmap.h"
 #include "midgardmapblock.h"
+#include "midgardmapfog.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
@@ -609,6 +611,33 @@ bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* bui
     IdSetIterator it;
     auto buildings = lord->data->buildList->data;
     return *idSetApi.find(&buildings, &it, buildingId) != buildings.end();
+}
+
+const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto id{createIdWithType(objectMap, game::IdType::Diplomacy)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const game::CMidDiplomacy*>(obj);
+}
+
+const game::CMidgardMapFog* getFog(const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidPlayer* player)
+{
+    using namespace game;
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &player->fogId)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const CMidgardMapFog*>(obj);
 }
 
 } // namespace hooks

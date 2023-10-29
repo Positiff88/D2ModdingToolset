@@ -1229,11 +1229,41 @@
     <ClCompile Include="src\generationresultinterf.cpp">
       <Filter>features\random scenario generator</Filter>
     </ClCompile>
+    <ClCompile Include="src\displayd3d.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\chatinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\formattedtext.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mqpresentationmanager.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\displayddraw.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\middiplomacy.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\diplomacyhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\diplomacyview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fonts.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fontshooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midgardmapfog.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\fogview.cpp">
+      <Filter>bindings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3211,6 +3241,9 @@
     <ClInclude Include="include\generationresultinterf.h">
       <Filter>features\random scenario generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\displayd3d.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\chatinterf.h">
       <Filter>game</Filter>
     </ClInclude>
@@ -3231,6 +3264,30 @@
     </ClInclude>
     <ClInclude Include="include\formattedtext.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\displayddraw.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\middiplomacy.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\diplomacyhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\diplomacyview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fonts.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fontshooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midgardmapfog.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\fogview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2023 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FACEIMG_H
-#define FACEIMG_H
-
-#include "mqimage2.h"
+#ifndef FONTSHOOKS_H
+#define FONTSHOOKS_H
 
 namespace game {
+struct FontCacheData;
+}
 
-struct IFaceImgVftable;
+namespace hooks {
 
-struct CFaceImg
-{
-    struct IFaceImg : public IMqImage2T<IFaceImgVftable>
-    { };
+bool __stdcall loadFontFilesHooked(const char* interfFolder);
 
-    assert_size(IFaceImg, 4);
-};
+void __fastcall fontCacheDataDtorHooked(game::FontCacheData* thisptr, int /*%edx*/);
 
-/** Unknown names map to CFaceImgImpl fields. */
-struct IFaceImgVftable : public IMqImage2Vftable
-{
-    /** Probably image index. */
-    using SetInt = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, int value);
-    SetInt setUnknown68;
+} // namespace hooks
 
-    using GetInt = int(__thiscall*)(CFaceImg::IFaceImg* thisptr);
-    GetInt getUnknown68;
-
-    SetInt setPercentHp;
-
-    SetInt setLeftSide;
-};
-
-assert_vftable_size(IFaceImgVftable, 13);
-
-} // namespace game
-
-#endif // FACEIMG_H
+#endif // FONTSHOOKS_H

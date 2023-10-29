@@ -167,6 +167,11 @@ BattleStatus = {
 }
 ```
 
+##### Relation
+```
+Relation = { War, Neutral, Peace }
+```
+
 ---
 
 #### Point
@@ -410,6 +415,16 @@ Returns true if the implementation has [modifier](luaApi.md#modifier) specified 
 impl:hasModifier("G000UM5021")
 impl:hasModifier(Id.new("G000UM5021"))
 ```
+##### getImmuneToAttackClass
+Returns [immune type](luaApi.md#immune) for specified [attack type](luaApi.md#attack).
+```lua
+impl:getImmuneToAttackClass(Attack.Paralyze)
+```
+##### getImmuneToAttackSource
+Returns [immune type](luaApi.md#immune) for specified [attack source](luaApi.md#source).
+```lua
+impl:getImmuneToAttackSource(Source.Water)
+```
 
 ---
 
@@ -447,6 +462,11 @@ slot.distance(otherSlot)
 Represents 6 unit slots.
 
 Methods:
+##### id
+Returns group [id](luaApi.md#id).
+```lua
+group.id
+```
 ##### slots
 Returns group as array of 6 [unit slots](luaApi.md#unit-slot).
 ```lua
@@ -462,6 +482,19 @@ Returns true if group has specified [unit](luaApi.md#unit-1) or [unit id](luaApi
 ```lua
 group:hasUnit(unit)
 group:hasUnit(Id.new('S143UN0001'))
+```
+
+---
+
+#### Fog
+Represents player's fog of war.
+
+Methods:
+##### getFog
+Returns true if specified map position is covered by fog of war.
+Map position can be specified by pair of coordinates or a [point](luaApi.md#point).
+```lua
+local hidden = fog:getFog(3, 7)
 ```
 
 ---
@@ -499,6 +532,15 @@ player.human
 Returns true if player is always AI.
 ```lua
 player.alwaysAi
+```
+##### fog
+Returns player's [fog of war](luaApi.md#fog).
+In fully loaded scenario, player objects always have fog of war. During scenario loading this property can return `nil`.
+```lua
+local fog = player.fog
+if fog == nil then
+    return
+end
 ```
 
 ---
@@ -743,6 +785,53 @@ tile.ground
 
 ---
 
+#### Diplomacy
+Represents diplomacy relations between [races](luaApi.md#race) in [scenario](luaApi.md#scenario).
+
+Methods:
+##### getCurrentRelation
+Returns current diplomacy relations value between two [races](luaApi.md#race) in range \[0 : 100\].
+```lua
+local current = diplomacy:getCurrentRelation(race1, race2)
+```
+##### getPreviousRelation
+Returns previous diplomacy relations value between two [races](luaApi.md#race) in range \[0 : 100\].
+```lua
+local prev = diplomacy:getPreviousRelation(race1, race2)
+```
+##### getAlliance
+Returns true if two [races](luaApi.md#race) are in alliance.
+```lua
+local allies = diplomacy:getAlliance(race1, race2)
+```
+##### getAllianceTurn
+Returns turn number when two [races](luaApi.md#race) made an alliance.
+Returns zero if races are not in alliance.
+```lua
+local turn = diplomacy:getAllianceTurn(race1, race2)
+```
+##### getAlwaysAtWar
+Returns true if two [races](luaApi.md#race) are always at war.
+```lua
+local atWar = diplomacy:getAlwaysAtWar(race1, race2)
+```
+##### getAiCouldNotBreakAlliance
+Returns true if diplomacy relations prohibit AI-controlled [races](luaApi.md#race) from breaking alliance.
+```lua
+local couldNotBreak = diplomacy:getAiCouldNotBreakAlliance(race1, race2)
+```
+##### getRelationType
+Returns [relation type](luaApi.md#relation) according to diplomacy relations value.
+```lua
+-- Value to type mapping (D_WAR and D_NEUTRAL can be found in GVars.dbf):
+-- 0       D_WAR           D_NEUTRAL         100
+-- |   War   |     Neutral     |     Peace    |
+--
+local relation = diplomacy:getRelationType(relationValue)
+```
+
+---
+
 #### Scenario
 Represents scenario map with all its objects and state.
 
@@ -887,6 +976,15 @@ Returns scenario map size.
 ```lua
 scenario.size
 ```
+##### diplomacy
+Returns object that holds [diplomacy](luaApi.md#diplomacy) relations between races.
+Fully loaded scenario always have diplomacy relations. During scenario loading this property can return `nil`.
+```lua
+local diplomacy = scenario.diplomacy
+if diplomacy == nil then
+    return
+end
+```
 
 ---
 
@@ -941,6 +1039,8 @@ attack.damageRatio
 attack.damageRatioPerTarget
 --- Returns true if damage is split among targets.
 attack.damageSplit
+--- Returns level for boost damage, lower damage and lower initiative attacks.
+attack.level
 ```
 
 ---
@@ -1059,6 +1159,34 @@ end
 Returns current round in battle. Round counting starts from 1, but there is a special round 0 when units with 'Doppelganger' [attacks](luaApi.md#attack) present.
 ```lua
 battle.currentRound
+```
+##### autoBattle
+Returns true if autobattle mode is turned on.
+```lua
+battle.autoBattle
+```
+##### attackerPlayer
+Returns [player](luaApi.md#player) that started battle.
+```lua
+battle.attackerPlayer
+```
+##### defenderPlayer
+Returns [player](luaApi.md#player) that was attacked.
+```lua
+battle.defenderPlayer
+```
+##### attacker
+Returns [stack](luaApi.md#stack) that started battle.
+Only stacks can initiate battles.
+```lua
+battle.attacker
+```
+##### defender
+Returns [group](luaApi.md#group) that was attacked.
+Defender group can represent units of a [stack](luaApi.md#stack), [fort](luaApi.md#fort) or [ruin](luaApi.md#ruin).
+Use `group.id` to get actual type of a group.
+```lua
+battle.defender
 ```
 
 ---

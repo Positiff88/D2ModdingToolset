@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2023 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FACEIMG_H
-#define FACEIMG_H
+#ifndef FOGVIEW_H
+#define FOGVIEW_H
 
-#include "mqimage2.h"
+#include "idview.h"
+
+namespace sol {
+class state;
+}
 
 namespace game {
+struct CMidgardMapFog;
+}
 
-struct IFaceImgVftable;
+namespace bindings {
 
-struct CFaceImg
+struct Point;
+
+class FogView
 {
-    struct IFaceImg : public IMqImage2T<IFaceImgVftable>
-    { };
+public:
+    FogView(const game::CMidgardMapFog* mapFog);
 
-    assert_size(IFaceImg, 4);
+    static void bind(sol::state& lua);
+
+    IdView getId() const;
+
+    bool getFogByCoordinates(int x, int y) const;
+    bool getFogByPoint(const Point& p) const;
+
+private:
+    const game::CMidgardMapFog* mapFog;
 };
 
-/** Unknown names map to CFaceImgImpl fields. */
-struct IFaceImgVftable : public IMqImage2Vftable
-{
-    /** Probably image index. */
-    using SetInt = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, int value);
-    SetInt setUnknown68;
+} // namespace bindings
 
-    using GetInt = int(__thiscall*)(CFaceImg::IFaceImg* thisptr);
-    GetInt getUnknown68;
-
-    SetInt setPercentHp;
-
-    SetInt setLeftSide;
-};
-
-assert_vftable_size(IFaceImgVftable, 13);
-
-} // namespace game
-
-#endif // FACEIMG_H
+#endif // FOGVIEW_H

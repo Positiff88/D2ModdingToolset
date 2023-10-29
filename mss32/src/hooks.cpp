@@ -83,6 +83,8 @@
 #include "eventeffectcathooks.h"
 #include "exchangeinterf.h"
 #include "exchangeinterfhooks.h"
+#include "fonts.h"
+#include "fontshooks.h"
 #include "fortcategory.h"
 #include "fortification.h"
 #include "gameutils.h"
@@ -375,6 +377,8 @@ static Hooks getGameHooks()
         {CBatAttackGroupUpgradeApi::get().upgradeGroup, upgradeGroupHooked},
         {fn.getUpgradeUnitImplCheckXp, getUpgradeUnitImplCheckXpHooked},
         {fn.changeUnitXpCheckUpgrade, changeUnitXpCheckUpgradeHooked},
+        // Allow player to customize movement cost
+        {fn.computeMovementCost, computeMovementCostHooked},
     };
     // clang-format on
 
@@ -711,8 +715,9 @@ Hooks getHooks()
     // Fix display of required buildings when multiple units have the same upgrade building
     hooks.emplace_back(HookInfo{fn.getUnitRequiredBuildings, getUnitRequiredBuildingsHooked});
 
-    // Allow foreign race units to upgrade even if its race capital is present in scenario (functions as if the unit type is locked)
-    // Allow foreign race units (including neutral) to be upgraded using capital buildings
+    // Allow foreign race units to upgrade even if its race capital is present in scenario
+    // (functions as if the unit type is locked) Allow foreign race units (including neutral) to be
+    // upgraded using capital buildings
     hooks.emplace_back(HookInfo{fn.isUnitTierMax, isUnitTierMaxHooked});
     hooks.emplace_back(HookInfo{fn.isUnitLevelNotMax, isUnitLevelNotMaxHooked});
     hooks.emplace_back(HookInfo{fn.isUnitUpgradePending, isUnitUpgradePendingHooked});
@@ -722,6 +727,10 @@ Hooks getHooks()
     // templates)
     hooks.emplace_back(
         HookInfo{CMidUnitApi::get().streamImplIdAndLevel, midUnitStreamImplIdAndLevelHooked});
+
+    // Support custom fonts
+    hooks.emplace_back(HookInfo{FontCacheApi::get().loadFontFiles, loadFontFilesHooked});
+    hooks.emplace_back(HookInfo{FontCacheApi::get().dataDestructor, fontCacheDataDtorHooked});
 
     return hooks;
 }
@@ -1350,7 +1359,7 @@ bool __stdcall buildLordSpecificBuildingsHooked(game::IMidgardObjectMap* objectM
 game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell* thisptr,
                                                            int /*%edx*/,
                                                            game::IMidgardObjectMap* objectMap,
-                                                           game::CInterface* interface,
+                                                           game::CInterface* interf,
                                                            void* a2,
                                                            game::CMidgardID* spellId,
                                                            game::CEncParamBase* encParam,
@@ -1370,7 +1379,7 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
 
     // Show spell price and casting cost
     encParam->data->statuses = 4;
-    return getOriginalFunctions().encLayoutSpellCtor(thisptr, objectMap, interface, a2, spellId,
+    return getOriginalFunctions().encLayoutSpellCtor(thisptr, objectMap, interf, a2, spellId,
                                                      encParam, playerId);
 }
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midgardplan.h"
+#include "displayddraw.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidgardPlanApi {
+namespace game::CDisplayDDrawApi {
 
 // clang-format off
-static std::array<Api, 4> functions = {{
+static std::array<IMqRasterizerVftable*, 4> vftables = {{
     // Akella
-    Api{
-        (Api::GetObjectId)0x5f685f,
-        (Api::IsPositionContainsObjects)0x5f69ae,
-    },
+    (IMqRasterizerVftable*)0x6f5c7c,
     // Russobit
-    Api{
-        (Api::GetObjectId)0x5f685f,
-        (Api::IsPositionContainsObjects)0x5f69ae,
-    },
+    (IMqRasterizerVftable*)0x6f5c7c,
     // Gog
-    Api{
-        (Api::GetObjectId)0x5f54e2,
-        (Api::IsPositionContainsObjects)0x5f5631,
-    },
+    (IMqRasterizerVftable*)0x6f3c2c,
     // Scenario Editor
-    Api{
-        (Api::GetObjectId)0x4e4a42,
-        (Api::IsPositionContainsObjects)0x4e4b91,
-    },
+    (IMqRasterizerVftable*)0x5e5494,
 }};
 // clang-format on
 
-Api& get()
+const IMqRasterizerVftable* vftable()
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidgardPlanApi
+} // namespace game::CDisplayDDrawApi

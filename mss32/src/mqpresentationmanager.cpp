@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midgardplan.h"
+#include "mqpresentationmanager.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidgardPlanApi {
+namespace game::CMqPresentationManagerApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetObjectId)0x5f685f,
-        (Api::IsPositionContainsObjects)0x5f69ae,
+        (Api::GetPresentationManager)0x516bd0,
+        (Api::PresentationMgrPtrSetData)0x4042ed,
     },
     // Russobit
     Api{
-        (Api::GetObjectId)0x5f685f,
-        (Api::IsPositionContainsObjects)0x5f69ae,
+        (Api::GetPresentationManager)0x516bd0,
+        (Api::PresentationMgrPtrSetData)0x4042ed,
     },
     // Gog
     Api{
-        (Api::GetObjectId)0x5f54e2,
-        (Api::IsPositionContainsObjects)0x5f5631,
+        (Api::GetPresentationManager)0x5160e0,
+        (Api::PresentationMgrPtrSetData)0x403f7d,
     },
     // Scenario Editor
     Api{
-        (Api::GetObjectId)0x4e4a42,
-        (Api::IsPositionContainsObjects)0x4e4b91,
+        (Api::GetPresentationManager)0x4ae820,
+        (Api::PresentationMgrPtrSetData)0x4156c2,
     },
 }};
 // clang-format on
@@ -53,4 +53,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidgardPlanApi
+} // namespace game::CMqPresentationManagerApi

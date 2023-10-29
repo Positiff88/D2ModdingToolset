@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYERVIEW_H
-#define PLAYERVIEW_H
+#ifndef DIPLOMACYVIEW_H
+#define DIPLOMACYVIEW_H
 
-#include "currencyview.h"
-#include "idview.h"
-#include <optional>
+#include <cstdint>
 
 namespace sol {
 class state;
 }
 
 namespace game {
-struct CMidPlayer;
-struct IMidgardObjectMap;
-} // namespace game
+struct CMidDiplomacy;
+}
 
 namespace bindings {
 
-class FogView;
+enum class RelationType : int
+{
+    War,
+    Neutral,
+    Peace,
+};
 
-class PlayerView
+class DiplomacyView
 {
 public:
-    PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap);
+    DiplomacyView(const game::CMidDiplomacy* diplomacy);
 
     static void bind(sol::state& lua);
 
-    IdView getId() const;
-    int getRaceCategoryId() const;
-    int getLordCategoryId() const;
-    CurrencyView getBank() const;
-    bool isHuman() const;
-    bool isAlwaysAi() const;
+    std::uint32_t getCurrentRelation(int race1CategoryId, int race2CategoryId) const;
+    std::uint32_t getPreviousRelation(int race1CategoryId, int race2CategoryId) const;
 
-    std::optional<FogView> getFog() const;
+    bool getAlliance(int race1CategoryId, int race2CategoryId) const;
+    std::uint32_t getAllianceTurn(int race1CategoryId, int race2CategoryId) const;
+    
+    bool getAlwaysAtWar(int race1CategoryId, int race2CategoryId) const;
+    bool getAiCouldNotBreakAlliance(int race1CategoryId, int race2CategoryId) const;
+
+    int getRelationType(std::uint32_t relations) const;
 
 private:
-    const game::CMidPlayer* player;
-    const game::IMidgardObjectMap* objectMap;
+    const game::CMidDiplomacy* diplomacy;
 };
 
-} // namespace bindings
+}
 
-#endif // PLAYERVIEW_H
+#endif // DIPLOMACYVIEW_H

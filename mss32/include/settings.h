@@ -86,6 +86,7 @@ struct Settings
         bool displayBonusHp;
         bool displayBonusXp;
         bool displayInfiniteAttackIndicator;
+        bool displayCriticalHitTextInAttackName;
     } unitEncyclopedia;
 
     struct Modifiers
@@ -105,6 +106,28 @@ struct Settings
 
     struct MovementCost
     {
+        struct Water
+        {
+            int dflt;
+            int deadLeader;
+            int withBonus;
+            int waterOnly;
+        } water;
+
+        struct Forest
+        {
+            int dflt;
+            int deadLeader;
+            int withBonus;
+        } forest;
+
+        struct Plain
+        {
+            int dflt;
+            int deadLeader;
+            int onRoad;
+        } plain;
+
         Color textColor{};
         Color outlineColor{};
         bool show{};

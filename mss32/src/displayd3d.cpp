@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midgardplan.h"
+#include "displayd3d.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidgardPlanApi {
+namespace game::CDisplayD3DApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetObjectId)0x5f685f,
-        (Api::IsPositionContainsObjects)0x5f69ae,
+        (Api::DrawPrimitive)0x6776d0,
+        (Api::SwapBuffers)0x676a40,
+        (Api::AlphaBlend)0x6775f0,
     },
     // Russobit
     Api{
-        (Api::GetObjectId)0x5f685f,
-        (Api::IsPositionContainsObjects)0x5f69ae,
+        (Api::DrawPrimitive)0x6776d0,
+        (Api::SwapBuffers)0x676a40,
+        (Api::AlphaBlend)0x6775f0,
     },
     // Gog
     Api{
-        (Api::GetObjectId)0x5f54e2,
-        (Api::IsPositionContainsObjects)0x5f5631,
+        (Api::DrawPrimitive)0x675fb0,
+        (Api::SwapBuffers)0x675320,
+        (Api::AlphaBlend)0x675ed0,
     },
     // Scenario Editor
     Api{
-        (Api::GetObjectId)0x4e4a42,
-        (Api::IsPositionContainsObjects)0x4e4b91,
+        (Api::DrawPrimitive)0x58eaa0,
+        (Api::SwapBuffers)0x58de10,
+        (Api::AlphaBlend)0x58e9c0,
     },
 }};
 // clang-format on
@@ -53,4 +57,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidgardPlanApi
+} // namespace game::CDisplayD3DApi
