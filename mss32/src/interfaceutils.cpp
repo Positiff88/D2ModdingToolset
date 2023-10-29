@@ -172,11 +172,10 @@ static std::string getModifiedNumberText(int value, int base, bool percent, bool
     if (!bonus) {
         return getNumberText(base, percent);
     }
-
     if (!base && !full) {
-        return getBonusNumberText(bonus, percent, reverse);
+        auto result = getNumberText(value, percent);
+        return getModifiedStringText(result, true);
     }
-
     auto result = getNumberText(base, percent);
     return addBonusNumberText(result, bonus, percent, reverse);
 }
