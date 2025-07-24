@@ -116,12 +116,15 @@ static void readModifierSettings(const sol::table& table, Settings::Modifiers& v
         return;
     }
 
-    value.cumulativeUnitRegeneration = readSetting(category.value(), "cumulativeUnitRegeneration",
-                                                   def.cumulativeUnitRegeneration);
     value.notifyModifiersChanged = readSetting(category.value(), "notifyModifiersChanged",
                                                def.notifyModifiersChanged);
     value.validateUnitsOnGroupChanged = readSetting(category.value(), "validateUnitsOnGroupChanged",
                                                     def.validateUnitsOnGroupChanged);
+    value.cumulativeUnitRegeneration = readSetting(category.value(), "cumulativeUnitRegeneration",
+                                                   def.cumulativeUnitRegeneration);
+    value.terrainRegenerationBonus = readSetting(category.value(), "terrainRegenerationBonus",
+                                                 def.terrainRegenerationBonus,
+                                                 (uint8_t)0, (uint8_t)100);
 }
 
 static Color readColor(const sol::table& table, const Color& def)
@@ -424,9 +427,10 @@ const Settings& baseSettings()
         settings.unitEncyclopedia.displayBonusXp = false;
         settings.unitEncyclopedia.displayInfiniteAttackIndicator = false;
         settings.fixEffectiveHpFormula = false;
-        settings.modifiers.cumulativeUnitRegeneration = false;
         settings.modifiers.notifyModifiersChanged = false;
         settings.modifiers.validateUnitsOnGroupChanged = false;
+        settings.modifiers.cumulativeUnitRegeneration = false;
+        settings.modifiers.terrainRegenerationBonus = 10;
         settings.allowBattleItems.onTransformOther = false;
         settings.allowBattleItems.onTransformSelf = false;
         settings.allowBattleItems.onDrainLevel = false;

@@ -419,7 +419,7 @@ static int getTerrainRegenBonus(const game::IMidgardObjectMap* objectMap,
 
     auto raceTerrain = getTerrainCategory(&player->raceType->data->raceType);
     if (terrain.id == raceTerrain->id) {
-        return 10; // Strictly hard-coded in game, not even const data
+        return userSettings().modifiers.terrainRegenerationBonus;
     }
 
     return 0;

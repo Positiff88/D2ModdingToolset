@@ -91,9 +91,10 @@ struct Settings
 
     struct Modifiers
     {
-        bool cumulativeUnitRegeneration;
         bool notifyModifiersChanged;
         bool validateUnitsOnGroupChanged;
+        bool cumulativeUnitRegeneration;
+        std::uint8_t terrainRegenerationBonus;
     } modifiers;
 
     struct AllowBattleItems

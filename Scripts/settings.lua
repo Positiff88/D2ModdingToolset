@@ -217,9 +217,6 @@ settings = {
 	},
 
 	modifiers = {
-		-- Allow unit regeneration modifiers to stack.
-		-- By default, the game picks single highest value, then sums it with lord, terrain and city bonuses.
-		cumulativeUnitRegeneration = false,
 		-- Enables 'onModifiersChanged' notification for custom modifier scripts.
 		-- Keep it disabled if you don't need it to improve general performance.
 		notifyModifiersChanged = false,
@@ -227,6 +224,11 @@ settings = {
 		-- to resolve issues with custom HP / XP modifiers, that depend on other units (like auras in MNS mod).
 		-- Keep it disabled if you don't need it to improve general performance.
 		validateUnitsOnGroupChanged = false,
+		-- Allow unit regeneration modifiers to stack.
+		-- By default, the game picks single highest value, then sums it with lord, terrain and city bonuses.
+		cumulativeUnitRegeneration = false,
+		-- Percent of unit's HP regeneration, provided by native terrain [0 : 100]
+		terrainRegenerationBonus = 10,
 	},
 
 	battle = {

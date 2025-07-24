@@ -333,6 +333,11 @@
     By default, the game picks single highest value, then sums it with lord, terrain and city bonuses;
   </details>
 - <details>
+    <summary>Allows to specify unit regeneration bonus from native terrain;</summary>
+
+    Specify `terrainRegenerationBonus` under `modifiers` category in [settings.lua](Scripts/settings.lua).<br />
+  </details>
+- <details>
     <summary>Adds new event conditions;</summary>
 
     - Replace `LEvCond.dbf` with [LEvCond.dbf](Examples/LEvCond.dbf);
