@@ -20,6 +20,7 @@
 #ifndef GLOBALDATA_H
 #define GLOBALDATA_H
 
+#include "globalvariables.h"
 #include "d2list.h"
 #include "d2map.h"
 #include "d2pair.h"

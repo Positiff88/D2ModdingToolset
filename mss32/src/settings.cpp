@@ -302,6 +302,9 @@ static void readEconomySettings(const sol::table& table, Settings::Economy& valu
     value.cityManaIncome.tier4 = def.cityManaIncome.tier4;
     value.cityManaIncome.tier5 = def.cityManaIncome.tier5;
 
+    value.rodCostGold = def.rodCostGold;
+    value.rodCostMana = def.rodCostMana;
+
     auto economy = table.get<sol::optional<sol::table>>("economy");
     if (!economy.has_value()) {
         return;
@@ -326,6 +329,9 @@ static void readEconomySettings(const sol::table& table, Settings::Economy& valu
         value.cityManaIncome.tier4 = readSetting(cityManaIncome.value(), "tier4", def.cityManaIncome.tier4);
         value.cityManaIncome.tier5 = readSetting(cityManaIncome.value(), "tier5", def.cityManaIncome.tier5);
     }
+
+    value.rodCostGold = readSetting(economy.value(), "rodCostGold", def.rodCostGold);
+    value.rodCostMana = readSetting(economy.value(), "rodCostMana", def.rodCostMana);
 }
 
 static void readSettings(const sol::table& table, Settings& settings)

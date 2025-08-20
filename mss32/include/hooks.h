@@ -24,6 +24,7 @@
 #include "attacktypepairvector.h"
 #include "d2string.h"
 #include "idlist.h"
+#include "lordtype.h"
 #include "targetset.h"
 #include <string>
 #include <utility>
@@ -285,6 +286,8 @@ bool __stdcall isUnitLevelNotMaxHooked(const game::IMidgardObjectMap* objectMap,
 
 bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
                                           const game::IMidgardObjectMap* objectMap);
+
+const game::TLordType* __stdcall getLordByPlayerHooked(const game::CMidPlayer* player);
 
 } // namespace hooks
 

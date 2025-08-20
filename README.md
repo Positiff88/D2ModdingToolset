@@ -396,6 +396,13 @@
     - `HU` for Empire;
     - `UN` for Undead Hordes;    
   </details>
+- <details>
+    <summary>Allows to change rod planting cost depending on the values in settings;</summary>
+
+    Values affect all races, excluding neutrals. Required mana type depends on current player's race.
+
+    Specify `rodCostGold` and `rodCostMana` under `economy` category in [settings.lua](Scripts/settings.lua).
+  </details>
 - Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
 - Allows Scenario Editor to place more than 200 stacks on a map;
 

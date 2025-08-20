@@ -259,7 +259,11 @@ settings = {
 			tier3 = 4,
 			tier4 = 7,
 			tier5 = 10
-		}
+		},
+		-- Amount of resources needed to place a rod
+		-- Required mana type depends on your race
+		rodCostGold = 100,
+		rodCostMana = 50,
 	},
 
 	-- Create mss32 proxy dll log files with debug info

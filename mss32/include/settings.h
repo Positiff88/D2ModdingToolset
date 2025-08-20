@@ -191,6 +191,9 @@ struct Settings
             std::int16_t tier4;
             std::int16_t tier5;
         } cityManaIncome;
+
+        std::int16_t rodCostGold;
+        std::int16_t rodCostMana;
     } economy;
 
     bool debugMode;

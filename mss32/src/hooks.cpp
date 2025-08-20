@@ -379,6 +379,8 @@ static Hooks getGameHooks()
         {fn.changeUnitXpCheckUpgrade, changeUnitXpCheckUpgradeHooked},
         // Allow player to customize movement cost
         {fn.computeMovementCost, computeMovementCostHooked},
+        // Set rod placement cost (gold and mana according to player's race)
+        {fn.getLordByPlayer, getLordByPlayerHooked}, //(void**)&orig.getLordByPlayer},
     };
     // clang-format on
 
@@ -2247,6 +2249,42 @@ bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
     }
 
     return false;
+}
+
+const game::TLordType* __stdcall getLordByPlayerHooked(const game::CMidPlayer* player)
+{
+    using namespace game;
+    const auto data = *GlobalDataApi::get().getGlobalData();
+    const auto& economy = userSettings().economy;
+    if (economy.rodCostGold > 0 || economy.rodCostMana > 0)
+    {
+        CurrencyType playerRaceManaType;
+        const auto& races = RaceCategories::get();
+        const auto playerRaceId = player->raceType->data->raceType.id;
+        auto rodCost = &(*data->globalVariables)->rodPlacementCost;
+
+        if (playerRaceId == races.heretic->id) {
+            playerRaceManaType = CurrencyType::InfernalMana;
+        } else if (playerRaceId == races.dwarf->id) {
+            playerRaceManaType = CurrencyType::RunicMana;
+        } else if (playerRaceId == races.undead->id) {
+            playerRaceManaType = CurrencyType::DeathMana;
+        } else if (playerRaceId == races.elf->id) {
+            playerRaceManaType = CurrencyType::GroveMana;
+        } else {
+            playerRaceManaType = CurrencyType::LifeMana;
+        }
+
+        BankApi::get().set(rodCost, CurrencyType::InfernalMana, 0);
+        BankApi::get().set(rodCost, CurrencyType::RunicMana, 0);
+        BankApi::get().set(rodCost, CurrencyType::DeathMana, 0);
+        BankApi::get().set(rodCost, CurrencyType::GroveMana, 0);
+        BankApi::get().set(rodCost, CurrencyType::LifeMana, 0);
+        BankApi::get().set(rodCost, CurrencyType::Gold, economy.rodCostGold);
+        BankApi::get().set(rodCost, playerRaceManaType, economy.rodCostMana);
+    }
+    return static_cast<const TLordType*>(
+        GlobalDataApi::get().findById(data->lords, &player->lordId));
 }
 
 } // namespace hooks
