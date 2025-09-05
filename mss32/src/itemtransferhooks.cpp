@@ -783,6 +783,9 @@ static void sellItemsToMerchant(game::CPhaseGame* phaseGame,
     std::vector<CMidgardID> itemsToSell;
     for (int i = 0; i < itemsTotal; ++i) {
         auto item = inventory.vftable->getItem(&inventory, i);
+        if (isItemEquipped(stack->leaderEquippedItems, item)) {
+            continue;
+        }
         if (!itemFilter || (itemFilter && (*itemFilter)(objectMap, item))) {
             itemsToSell.push_back(*item);
         }
@@ -912,6 +915,9 @@ static game::Bank computeItemsSellPrice(game::IMidgardObjectMap* objectMap,
     Bank sellPrice{};
     for (int i = 0; i < itemsTotal; ++i) {
         auto item = inventory.vftable->getItem(&inventory, i);
+        if (isItemEquipped(stack->leaderEquippedItems, item)) {
+            continue;
+        }
         if (!itemFilter || (itemFilter && (*itemFilter)(objectMap, item))) {
             Bank price{};
             getSellingPrice(&price, objectMap, item);
