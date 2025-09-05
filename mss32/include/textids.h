@@ -30,6 +30,7 @@ struct TextIds
     {
         std::string sellAllValuables;
         std::string sellAllItems;
+        std::string sellPriceSeparator;
         std::string critHitAttack;
         std::string critHitDamage;
         std::string ratedDamage;

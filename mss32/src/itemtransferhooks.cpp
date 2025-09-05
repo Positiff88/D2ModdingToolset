@@ -850,47 +850,33 @@ game::CMidMsgBoxButtonHandlerVftable sellAllItemsMsgBoxHandlerVftable{
     (game::CMidMsgBoxButtonHandlerVftable::Destructor)sellItemsMsgBoxHandlerDtor,
     (game::CMidMsgBoxButtonHandlerVftable::Handler)sellAllItemsMsgBoxHandlerFunction};
 
+static void appendBankResource(std::string* priceText,
+                               const std::string separator,
+                               const char* textId,
+                               const std::int16_t resource)
+{
+    if (resource) {
+        auto text = getInterfaceText(textId);
+        replace(text, "%QTY%", fmt::format("{:d}", resource));
+        if (!(*priceText).empty())
+            (*priceText).append(separator);
+        (*priceText).append(text);
+    }
+}
+
 static std::string bankToPriceMessage(const game::Bank& bank)
 {
     using namespace game;
-
-    std::string priceText;
-    if (bank.gold) {
-        auto text = getInterfaceText("X005TA0055");
-        replace(text, "%QTY%", fmt::format("{:d}", bank.gold));
-        priceText.append(text + '\n');
-    }
-
-    if (bank.runicMana) {
-        auto text = getInterfaceText("X005TA0056");
-        replace(text, "%QTY%", fmt::format("{:d}", bank.runicMana));
-        priceText.append(text + '\n');
-    }
-
-    if (bank.deathMana) {
-        auto text = getInterfaceText("X005TA0057");
-        replace(text, "%QTY%", fmt::format("{:d}", bank.deathMana));
-        priceText.append(text + '\n');
-    }
-
-    if (bank.lifeMana) {
-        auto text = getInterfaceText("X005TA0058");
-        replace(text, "%QTY%", fmt::format("{:d}", bank.lifeMana));
-        priceText.append(text + '\n');
-    }
-
-    if (bank.infernalMana) {
-        auto text = getInterfaceText("X005TA0059");
-        replace(text, "%QTY%", fmt::format("{:d}", bank.infernalMana));
-        priceText.append(text + '\n');
-    }
-
-    if (bank.groveMana) {
-        auto text = getInterfaceText("X160TA0001");
-        replace(text, "%QTY%", fmt::format("{:d}", bank.groveMana));
-        priceText.append(text + '\n');
-    }
-
+    auto separator = getInterfaceText(textIds().interf.sellPriceSeparator.c_str());
+    if (separator.empty())
+        separator = ", ";
+    std::string priceText = "";
+    appendBankResource(&priceText, separator, "X005TA0055", bank.gold);
+    appendBankResource(&priceText, separator, "X005TA0056", bank.runicMana);
+    appendBankResource(&priceText, separator, "X005TA0057", bank.deathMana);
+    appendBankResource(&priceText, separator, "X005TA0058", bank.lifeMana);
+    appendBankResource(&priceText, separator, "X005TA0059", bank.infernalMana);
+    appendBankResource(&priceText, separator, "X160TA0001", bank.groveMana);
     return priceText;
 }
 

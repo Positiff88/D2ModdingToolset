@@ -18,6 +18,10 @@ textids = {
 		-- Fallback text is "Do you want to sell all items? Revenue will be:\n%PRICE%"
 		sellAllItems = "",
 
+		-- Defines text id for sell price separator in "sell all valuables" and "sell all items" messages.
+		-- Fallback text is ", ".
+		sellPriceSeparator = "",
+
 		-- Defines format id for effect duration description in unit encyclopedia.
 		-- The text must contain keywords "%DURATION%" and "%DURATIONVALUE%".
 		-- Fallback text is "\fMedBold;%DURATION%:\t\fNormal;%DURATIONVALUE%\n"
