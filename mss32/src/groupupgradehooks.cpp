@@ -44,9 +44,11 @@ int changeUnitXpAndUpgrade(game::IMidgardObjectMap* objectMap,
 
     int xpAdded = 0;
     bool infoAdded = false;
+    bool isUnitLevelMax = false;
     while (xpReceived - xpAdded > 0) {
-        if (fn.isUnitTierMax(objectMap, playerId, &unit->id)
-            && !fn.isUnitLevelNotMax(objectMap, playerId, &unit->id)) {
+        isUnitLevelMax = fn.isUnitTierMax(objectMap, playerId, &unit->id)
+                         && !fn.isUnitLevelNotMax(objectMap, playerId, &unit->id);
+        if (isUnitLevelMax) {
             break;
         }
 
@@ -79,7 +81,7 @@ int changeUnitXpAndUpgrade(game::IMidgardObjectMap* objectMap,
         }
     }
 
-    if (userSettings().battle.carryXpOverUpgrade) {
+    if (userSettings().battle.carryXpOverUpgrade && !isUnitLevelMax) {
         xpAdded += addUnitXpNoUpgrade(objectMap, unit, xpReceived - xpAdded);
     }
 
