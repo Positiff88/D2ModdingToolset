@@ -177,6 +177,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackdrainoverflow.cpp" />
     <ClCompile Include="src\batattackgiveattack.cpp" />
     <ClCompile Include="src\batattackgroupupgrade.cpp" />
+    <ClCompile Include="src\batattacklowerinitiative.cpp" />
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\batattacksummon.cpp" />
     <ClCompile Include="src\batattacktransformother.cpp" />
@@ -292,6 +293,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\logutils.cpp" />
+    <ClCompile Include="src\lowerinitiativehooks.cpp" />
     <ClCompile Include="src\managestkinterf.cpp" />
     <ClCompile Include="src\managestkinterfhooks.cpp" />
     <ClCompile Include="src\middiplomacy.cpp" />
@@ -611,6 +613,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackgiveattack.h" />
     <ClInclude Include="include\batattackgroupupgrade.h" />
     <ClInclude Include="include\batattackitem.h" />
+    <ClInclude Include="include\batattacklowerinitiative.h" />
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\batattacksummon.h" />
     <ClInclude Include="include\batattacktransformother.h" />
@@ -675,6 +678,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\diplomacyhooks.h" />
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
+    <ClInclude Include="include\lowerinitiativehooks.h" />
     <ClInclude Include="include\middiplomacy.h" />
     <ClInclude Include="include\midgardmapfog.h" />
     <ClInclude Include="include\displayd3d.h" />

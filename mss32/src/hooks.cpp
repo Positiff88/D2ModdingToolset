@@ -31,6 +31,7 @@
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
 #include "batattackgroupupgrade.h"
+#include "batattacklowerinitiative.h"
 #include "batattackshatter.h"
 #include "batattacksummon.h"
 #include "batattacktransformother.h"
@@ -104,6 +105,7 @@
 #include "listbox.h"
 #include "log.h"
 #include "lordtype.h"
+#include "lowerinitiativehooks.h"
 #include "mainview2.h"
 #include "mainview2hooks.h"
 #include "managestkinterf.h"
@@ -380,7 +382,9 @@ static Hooks getGameHooks()
         // Allow player to customize movement cost
         {fn.computeMovementCost, computeMovementCostHooked},
         // Set rod placement cost (gold and mana according to player's race)
-        {fn.getLordByPlayer, getLordByPlayerHooked}, //(void**)&orig.getLordByPlayer},
+        {fn.getLordByPlayer, getLordByPlayerHooked},
+        // Change unit turn order after lower initiative attack hit
+        {CBatAttackLowerInitiativeApi::vftable()->onHit, lowerInitiativeOnHitHooked, (void**)&orig.batAttackLowerInitiativeOnHit},
     };
     // clang-format on
 

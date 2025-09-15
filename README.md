@@ -458,6 +458,7 @@
     Specify `drainAttackHeal` and `drainOverflowHeal` in [settings.lua](Scripts/settings.lua).
   </details>
 - Allows vampiric attacks to deal critical damage;
+- Allows lower initiative attacks to change unit turn order right after hit;
 - <details>
     <summary>Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;</summary>
 

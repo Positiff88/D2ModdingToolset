@@ -21,6 +21,7 @@
 #define ORIGINALFUNCTIONS_H
 
 #include "attackimpl.h"
+#include "batattack.h"
 #include "battlemsgdata.h"
 #include "citystackinterf.h"
 #include "commandmsg.h"
@@ -146,6 +147,8 @@ struct OriginalFunctions
     game::CMidDataCache2::INotifyVftable::OnObjectChanged cityStackInterfOnObjectChanged;
 
     game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
+
+    game::IBatAttackVftable::OnAttack batAttackLowerInitiativeOnHit;
 };
 
 OriginalFunctions& getOriginalFunctions();
