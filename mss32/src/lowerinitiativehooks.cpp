@@ -43,8 +43,8 @@ static bool __fastcall hasLoweredInitiative(const game::CMidgardID unitId,
 static int __fastcall getUnitInitiative(game::CMidgardID* unitId,
                                         game::IMidgardObjectMap* objectMap,
                                         game::BattleAttackInfo** attackInfo,
-                                        const game::Functions& functions,
-                                        const int lowerIni)
+                                        const game::GlobalVariables* vars,
+                                        const game::Functions& functions)
 {
     auto targetUnit = functions.findUnitById(objectMap, unitId);
     if (!targetUnit)
@@ -57,7 +57,8 @@ static int __fastcall getUnitInitiative(game::CMidgardID* unitId,
         return -1;
     int unitInitiative = soldierAttack->vftable->getInitiative(soldierAttack);
     if (hasLoweredInitiative(*unitId, *attackInfo))
-        unitInitiative = unitInitiative * (100 - lowerIni) / 100;
+        unitInitiative = unitInitiative * (100 - vars->battleLowerIni) / 100;
+    unitInitiative += functions.generateRandomNumber(vars->additionalBattleIni);
     return unitInitiative;
 }
 
@@ -72,9 +73,9 @@ void __fastcall lowerInitiativeOnHitHooked(game::CBatAttackLowerInitiative* batA
                                                          targetUnitId, attackInfo);
     
     using namespace game;
-    const auto& fn = gameFunctions();
+    const auto& funcs = gameFunctions();
     const auto data = *GlobalDataApi::get().getGlobalData();
-    const int lowerIni = (*data->globalVariables)->battleLowerIni;
+    const auto vars = *data->globalVariables;
     
     int targetIni = 0;
     bool targetFound = false;
@@ -85,17 +86,18 @@ void __fastcall lowerInitiativeOnHitHooked(game::CBatAttackLowerInitiative* batA
         if (!attackerFound)
             attackerFound = currentUnit.unitId == batAttack->unitId1;
         if (targetFound) {
-            int unitIni = getUnitInitiative(&currentUnit.unitId, objectMap, attackInfo, fn, lowerIni);
-            if (unitIni > targetIni) {
+            int unitIni = getUnitInitiative(&currentUnit.unitId, objectMap, attackInfo, vars, funcs);
+            if (unitIni > targetIni || (unitIni == targetIni && funcs.generateRandomNumber(2) == 1)) {
                 battleMsgData->turnsOrder[index - 1] = currentUnit;
                 battleMsgData->turnsOrder[index] = targetUnit;
-            }
+            } else
+                break;
         } else if (currentUnit.unitId == *targetUnitId) {
             if (!attackerFound)
-                return;
+                break;
             targetFound = true;
             targetUnit = currentUnit;
-            targetIni = getUnitInitiative(targetUnitId, objectMap, attackInfo, fn, lowerIni);
+            targetIni = getUnitInitiative(targetUnitId, objectMap, attackInfo, vars, funcs);
         }
     }
 }
