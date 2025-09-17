@@ -41,6 +41,26 @@
 
 namespace hooks {
 
+static int getUnitInitiative(game::CMidgardID* unitId,
+                             game::IMidgardObjectMap* objectMap,
+                             game::BattleAttackInfo** attackInfo,
+                             const game::GlobalVariables* vars,
+                             const game::Functions& functions)
+{
+    auto targetUnit = functions.findUnitById(objectMap, unitId);
+    if (!targetUnit)
+        return -1;
+    auto targetSoldier = functions.castUnitImplToSoldier(targetUnit->unitImpl);
+    if (!targetSoldier)
+        return -1;
+    auto soldierAttack = targetSoldier->vftable->getAttackById(targetSoldier);
+    if (!soldierAttack)
+        return -1;
+    int unitInitiative = soldierAttack->vftable->getInitiative(soldierAttack);
+    unitInitiative += functions.generateRandomNumber(vars->additionalBattleIni);
+    return unitInitiative;
+}
+
 static int getSummonLevel(const game::CMidUnit* summoner,
                           game::TUsUnitImpl* summonImpl,
                           const game::IMidgardObjectMap* objectMap,
@@ -230,6 +250,30 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     battle.setSummonOwner(battleMsgData, &newUnitId, &thisptr->unitId);
 
     visitors.forceUnitMax(&targetGroupId, -1, objectMap, 1);
+
+    // Allow the summoned unit to attack in current battle round
+    const auto vars = *globalData->globalVariables;
+    bool canSummon = false, needSummon = true;
+    int summonIni = getUnitInitiative(&newUnitId, objectMap, attackInfo, vars, fn);
+    BattleTurn summonUnit {newUnitId, soldier->vftable->getAttackTwice(soldier) ? 2 : 1};
+    for (int index = 11; index >= 0; index--) {
+        BattleTurn currentUnit = battleMsgData->turnsOrder[index];
+        if (currentUnit.unitId == invalidId) {
+            canSummon = true;
+        } else if (currentUnit.unitId != thisptr->unitId) {
+            if (needSummon && canSummon) {
+                needSummon = false;
+                battleMsgData->turnsOrder[index + 1] = summonUnit;
+            }
+            int unitIni = getUnitInitiative(&currentUnit.unitId, objectMap, attackInfo, vars, fn);
+            if (unitIni < summonIni || (unitIni == summonIni && fn.generateRandomNumber(2) == 1)) {
+                battleMsgData->turnsOrder[index + 1] = currentUnit;
+                battleMsgData->turnsOrder[index] = summonUnit;
+            } else
+                break;
+        } else
+            break;
+    }
 }
 
 } // namespace hooks
