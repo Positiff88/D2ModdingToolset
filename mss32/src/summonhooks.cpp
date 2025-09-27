@@ -256,11 +256,11 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     bool canSummon = false, needSummon = true;
     int summonIni = getUnitInitiative(&newUnitId, objectMap, attackInfo, vars, fn);
     BattleTurn summonUnit {newUnitId, soldier->vftable->getAttackTwice(soldier) ? 2 : 1};
-    for (int index = 11; index >= 0; index--) {
+    for (int index = 11; index > 0; index--) {
         BattleTurn currentUnit = battleMsgData->turnsOrder[index];
         if (currentUnit.unitId == invalidId) {
             canSummon = true;
-        } else if (currentUnit.unitId != thisptr->unitId) {
+        } else {
             if (needSummon && canSummon) {
                 needSummon = false;
                 battleMsgData->turnsOrder[index + 1] = summonUnit;
@@ -271,8 +271,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
                 battleMsgData->turnsOrder[index] = summonUnit;
             } else
                 break;
-        } else
-            break;
+        }
     }
 }
 
