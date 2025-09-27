@@ -79,12 +79,9 @@ void __fastcall lowerInitiativeOnHitHooked(game::CBatAttackLowerInitiative* batA
     
     int targetIni = 0;
     bool targetFound = false;
-    bool attackerFound = false;
     BattleTurn targetUnit{};
-    for (int index = 0; index < 12; index++) {
+    for (int index = 1; index < 12; index++) {
         BattleTurn currentUnit = battleMsgData->turnsOrder[index];
-        if (!attackerFound)
-            attackerFound = currentUnit.unitId == batAttack->unitId1;
         if (targetFound) {
             int unitIni = getUnitInitiative(&currentUnit.unitId, objectMap, attackInfo, vars, funcs);
             if (unitIni > targetIni || (unitIni == targetIni && funcs.generateRandomNumber(2) == 1)) {
@@ -93,8 +90,6 @@ void __fastcall lowerInitiativeOnHitHooked(game::CBatAttackLowerInitiative* batA
             } else
                 break;
         } else if (currentUnit.unitId == *targetUnitId) {
-            if (!attackerFound)
-                break;
             targetFound = true;
             targetUnit = currentUnit;
             targetIni = getUnitInitiative(targetUnitId, objectMap, attackInfo, vars, funcs);
