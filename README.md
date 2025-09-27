@@ -459,6 +459,7 @@
   </details>
 - Allows vampiric attacks to deal critical damage;
 - Allows lower initiative attacks to change unit turn order right after hit;
+- Allows the summoned unit to attack in current battle round according to initiative;
 - <details>
     <summary>Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;</summary>
 
